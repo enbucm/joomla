@@ -1,7 +1,7 @@
 # Joomla Container by H5.Technology [no mysql]
 
 ```Dockerfile
-docker run \
+docker run -d \
   --restart=always \
   --name myjoomla \
   -p 8080:80 \
