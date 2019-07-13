@@ -5,7 +5,7 @@ docker run -d \
   --restart=always \
   --name myjoomla \
   -p 8080:80 \
-  -e EMAIL="admin@yourdomain.org \
+  -e EMAIL="admin@yourdomain.org" \
   -e DOMAIN="yourdomain.org" \
   enbucm/joomla
 ```
