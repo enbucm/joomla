@@ -25,7 +25,7 @@ RUN cd /root/ &&\
   mkdir -p /var/www/html &&\
   unzip joomla.zip -d /var/www/html &&\
   chown -R www-data:www-data /var/www/html &&\
-  sa
+  rm joomla.zip
 
 # configure appache2
 RUN printf "<VirtualHost *:80>\n\n" > /etc/apache2/sites-available/joomla.conf &&\
