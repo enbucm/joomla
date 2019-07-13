@@ -42,8 +42,8 @@ RUN printf "<VirtualHost *:80>\n\n" > /etc/apache2/sites-available/joomla.conf &
   printf "  CustomLog /var/log/apache2/joomla-access_log common\n\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "</VirtualHost>\n" >> /etc/apache2/sites-available/joomla.conf &&\
   ln -s /etc/apache2/sites-available/joomla.conf /etc/apache2/sites-enabled/joomla.conf &&\
-  a2enmod php7.2 &&\
-  service apache2 restart 
+  #a2enmod php7.2 &&\
+  #service apache2 restart 
 
 # package install is finished, clean up
 
@@ -51,4 +51,4 @@ RUN apt-get clean && \
   rm -rf /var/lib/apt/lists/* &&\
   rm -rf /tmp/* /var/tmp/*
 
-
+CMD apache2ctl -D FOREGROUND
