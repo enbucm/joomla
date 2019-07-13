@@ -4,7 +4,6 @@ MAINTAINER H5.Technology <admin@h5tec.com>
 
 # Set correct environment variables.
 ENV HOME /root
-ENV MAIL admin@yourdomain.com
 
 # update the package s# install packages
 RUN apt update && apt upgrade -y &&\
@@ -31,7 +30,7 @@ RUN printf "<VirtualHost *:80>\n\n" > /etc/apache2/sites-available/joomla.conf &
   printf "  ServerAdmin admin@domain.org\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "  DocumentRoot /var/www/html/joomla\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "  ServerName localhost\n\n" >> /etc/apache2/sites-available/joomla.conf &&\
-  printf "  <Directory /var/www/html>\n" >> /etc/apache2/sites-available/joomla.conf &&\
+  printf "  <Directory /var/www/html/joomla>\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "    Options FollowSymLinks\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "    AllowOverride All\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "    Order allow,deny\n" >> /etc/apache2/sites-available/joomla.conf &&\
