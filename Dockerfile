@@ -4,8 +4,7 @@ MAINTAINER H5.Technology <admin@h5tec.com>
 
 # Set correct environment variables.
 ENV HOME /root
-ENV EMAIL admin@yourdomain.com
-ENV DOMAIN yourdomain.com
+ENV MAIL admin@yourdomain.com
 
 # update the package s# install packages
 RUN apt update && apt upgrade -y &&\
@@ -22,16 +21,16 @@ RUN apt update && apt install -y libapache2-mod-php7.2 \
 # install joomla
 RUN cd /root/ &&\
   wget -O joomla.zip https://downloads.joomla.org/cms/joomla3/3-9-10/Joomla_3-9-10-Stable-Full_Package.zip?format=zip &&\
-  mkdir -p /var/www/html &&\
-  unzip joomla.zip -d /var/www/html &&\
-  chown -R www-data:www-data /var/www/html &&\
+  mkdir -p /var/www/html/joomla &&\
+  unzip joomla.zip -d /var/www/html/joomla &&\
+  chown -R www-data:www-data /var/www/html/joomla &&\
   rm joomla.zip
 
 # configure appache2
 RUN printf "<VirtualHost *:80>\n\n" > /etc/apache2/sites-available/joomla.conf &&\
-  printf "  ServerAdmin $EMAIL\n" >> /etc/apache2/sites-available/joomla.conf &&\
-  printf "  DocumentRoot /var/www/html\n" >> /etc/apache2/sites-available/joomla.conf &&\
-  printf "  ServerName $DOMAIN\n\n" >> /etc/apache2/sites-available/joomla.conf &&\
+  printf "  ServerAdmin admin@domain.org\n" >> /etc/apache2/sites-available/joomla.conf &&\
+  printf "  DocumentRoot /var/www/html/joomla\n" >> /etc/apache2/sites-available/joomla.conf &&\
+  printf "  ServerName localhost\n\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "  <Directory /var/www/html>\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "    Options FollowSymLinks\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "    AllowOverride All\n" >> /etc/apache2/sites-available/joomla.conf &&\
