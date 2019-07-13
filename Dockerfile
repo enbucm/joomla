@@ -20,7 +20,8 @@ RUN apt update && apt install -y libapache2-mod-php7.2 \
 # install joomla
 RUN cd /root/ &&\
   wget -O joomla.zip https://downloads.joomla.org/cms/joomla3/3-9-10/Joomla_3-9-10-Stable-Full_Package.zip?format=zip &&\
-  rm -rf /var/www/html/* &&\
+  mkdir -p /var/www/html &&\
+  rm /var/www/html/index.html &&\
   unzip joomla.zip -d /var/www/html &&\
   chown -R www-data:www-data /var/www/html &&\
   rm joomla.zip
