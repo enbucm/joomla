@@ -6,6 +6,6 @@ docker run -d \
   --name myjoomla \
   -p 8080:80 \
   -v /dock/data/myjoomla/log:/var/log/apache2 \
-  -v /dock/data/myjoomla/html:/var/www/html/joomla \
+  -v /dock/data/myjoomla/html:/var/www/html \
   enbucm/joomla
 ```
