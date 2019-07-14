@@ -57,5 +57,4 @@ RUN apt-get clean && \
   rm -rf /var/lib/apt/lists/* &&\
   rm -rf /tmp/* /var/tmp/*
 
-CMD while true; do mv -n /var/www/html/htaccess.txt /var/www/html/.htaccess &> /dev/null; sleep 5; done &
 CMD apache2ctl -D FOREGROUND
