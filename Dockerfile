@@ -80,7 +80,7 @@ RUN rm /etc/apache2/sites-enabled/*; \
   printf "    allow from all\n" >> /etc/apache2/sites-available/joomla.conf; \
   printf "  </Directory>\n\n" >> /etc/apache2/sites-available/joomla.conf; \
   printf "  ErrorLog /var/log/apache2/joomla-error_log\n" >> /etc/apache2/sites-available/joomla.conf; \
-  printf "  CustomLog /var/log/apache2/joomla-access_log common\n\n" >> /etc/apache2/sites-available/joomla.conf
+  printf "  CustomLog /var/log/apache2/joomla-access_log common\n\n" >> /etc/apache2/sites-available/joomla.conf; \
   printf "</VirtualHost>\n" >> /etc/apache2/sites-available/joomla.conf; \
   ln -s /etc/apache2/sites-available/joomla.conf /etc/apache2/sites-enabled/joomla.conf
 
@@ -107,9 +107,7 @@ RUN wget -O joomla.zip 'https://downloads.joomla.org/cms/joomla3/3-9-10/Joomla_3
   rm joomla.zip
 
 # clean up scotti
-RUN apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
-	rm -rf /var/lib/apt/lists/*; \
-  apt-get clean; \
+RUN apt-get clean; \
   rm -rf /var/lib/apt/lists/*; \
   rm -rf /tmp/* /var/tmp/*
 
