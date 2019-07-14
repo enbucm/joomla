@@ -6,7 +6,7 @@ MAINTAINER H5.Technology <admin@h5tec.com>
 ENV HOME /root
 ENV JOOMLA_INSTALLATION_DISABLE_LOCALHOST_CHECK=1
 
-# 
+# install and configure everything in one step
 RUN set -ex; \
   savedAptMark="$(apt-mark showmanual)"; \
   apt-get update -yqq; \
@@ -31,7 +31,7 @@ RUN set -ex; \
     libzip-dev \
     libxml2-dev \
     libcurl3-openssl-dev; \
-#
+# Install php 7.2 and all components; \
   wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg; \
   echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list; \
   apt-get update -yqq; \
@@ -71,11 +71,11 @@ RUN set -ex; \
 		| cut -d: -f1 \
 		| sort -u \
 		| xargs -rt apt-mark manual; \
-# enable apache2mod's in case is not
+# enable apache2mod's in case is not; \
   a2enmod rewrite; \
   a2enmod proxy_fcgi setenvif; \
   a2enconf php7.2-fpm; \
-# create and enable apache joomla.conf
+# create and enable apache joomla.conf; \
   rm /etc/apache2/sites-enabled/*; \
   printf "<VirtualHost *:80>\n\n" > /etc/apache2/sites-available/joomla.conf; \
   printf "  ServerAdmin webmaster@localhost\n" >> /etc/apache2/sites-available/joomla.conf; \
@@ -91,9 +91,9 @@ RUN set -ex; \
   printf "  CustomLog /var/log/apache2/joomla-access_log common\n\n" >> /etc/apache2/sites-available/joomla.conf; \
   printf "</VirtualHost>\n" >> /etc/apache2/sites-available/joomla.conf; \
   ln -s /etc/apache2/sites-available/joomla.conf /etc/apache2/sites-enabled/joomla.conf; \
-# modify /etc/apache2/apache2.conf
+# modify /etc/apache2/apache2.conf; \
   printf "\n<IfModule mod_env.c>\n  SetEnv HTTPS on\n</IfModule>\n\n" >> /etc/apache2/apache2.conf; \
-# modify /etc/php/7.0/apache2/php.ini
+# modify /etc/php/7.0/apache2/php.ini; \
   printf "memory_limit = 256M\n" >> /etc/php/7.2/apache2/php.ini; \
   printf "post_max_size = 32M\n" >> /etc/php/7.2/apache2/php.ini; \
   printf "date.timezone = Europe/Berlin\n" >> /etc/php/7.2/apache2/php.ini; \
@@ -103,14 +103,14 @@ RUN set -ex; \
   printf "extension = apcu.so\n" >> /etc/php/7.2/apache2/php.ini; \
   printf "extension = memcached.so\n" >> /etc/php/7.2/apache2/php.ini; \
   printf "extension = redis.so\n" >> /etc/php/7.2/apache2/php.ini; \
-# download and unpack joomla
+# download and unpack joomla; \
   wget -O joomla.zip 'https://downloads.joomla.org/cms/joomla3/3-9-10/Joomla_3-9-10-Stable-Full_Package.zip?format=zip'; \
   rm -rf /var/www/html/*; \
   unzip joomla.zip -d /var/www/html; \
   chown -R www-data:www-data /var/www/html; \
   chmod -R 755 /var/www/html; \
   rm joomla.zip; \
-# package install is finished, clean up
+# package install is finished, clean up; \
   apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
 	rm -rf /var/lib/apt/lists/*; \
   apt-get clean; \
