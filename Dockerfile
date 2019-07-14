@@ -111,8 +111,6 @@ RUN apt-get clean; \
   rm -rf /var/lib/apt/lists/*; \
   rm -rf /tmp/* /var/tmp/*
 
-VOLUME /var/www/html
-
 EXPOSE 80
 
 CMD apache2ctl -D FOREGROUND
