@@ -7,7 +7,7 @@ ENV HOME /root
 
 # update the package s# install packages
 RUN apt update && apt upgrade -y &&\
-  apt install -y apt-transport-https lsb-release ca-certificates wget curl nano unzip apache2 &&\
+  apt install -y apt-transport-https lsb-release ca-certificates wget curl nano unzip apache2 systemd &&\
   wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg &&\
   echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
 
@@ -18,18 +18,18 @@ RUN apt update && apt install -y libapache2-mod-php7.2 \
   php7.2-readline php7.2-intl php7.2-fpm
 
 # install joomla
-RUN cd /root/ &&\
+RUN cd /tmp &&\
   wget -O joomla.zip https://downloads.joomla.org/cms/joomla3/3-9-10/Joomla_3-9-10-Stable-Full_Package.zip?format=zip &&\
-  mkdir -p /var/www/html &&\
-  rm /var/www/html/index.html &&\
+  rm -rf /var/www/html/* &&\
   unzip joomla.zip -d /var/www/html &&\
-  chown -R www-data:www-data /var/www/html &&\
+  #chown -R www-data:www-data /var/www/html &&\
+  #chmod -R 755 /var/www/html &&\
   rm joomla.zip
 
-# configure appache2
+# configure apache2
 RUN rm /etc/apache2/sites-enabled/* &&\
   printf "<VirtualHost *:80>\n\n" > /etc/apache2/sites-available/joomla.conf &&\
-  printf "  ServerAdmin admin@domain.org\n" >> /etc/apache2/sites-available/joomla.conf &&\
+  printf "  ServerAdmin webmaster@localhost\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "  DocumentRoot /var/www/html\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "  ServerName localhost\n\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "  <Directory /var/www/html>\n" >> /etc/apache2/sites-available/joomla.conf &&\
@@ -41,8 +41,16 @@ RUN rm /etc/apache2/sites-enabled/* &&\
   printf "  ErrorLog /var/log/apache2/joomla-error_log\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "  CustomLog /var/log/apache2/joomla-access_log common\n\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "</VirtualHost>\n" >> /etc/apache2/sites-available/joomla.conf &&\
-  ln -s /etc/apache2/sites-available/joomla.conf /etc/apache2/sites-enabled/joomla.conf &&\
-  a2enmod php7.2
+  ln -s /etc/apache2/sites-available/joomla.conf /etc/apache2/sites-enabled/joomla.conf
+
+# configure php.ini
+RUN printf "upload_max_filesize=16M\n" >> /etc/php/7.2/apache2/php.ini &&\
+  printf "post_max_size=16M\n" >> /etc/php/7.2/apache2/php.ini &&\
+  printf "max_execution_time=60\n" >> /etc/php/7.2/apache2/php.ini
+
+# configur .htaccess
+RUN mv /var/www/html/htaccess.txt /var/www/html/.htaccess &&\
+  printf "\n<IfModule mod_env.c>\n  SetEnv HTTPS on\n</IfModule>\n\n" >> /etc/apache2/apache2.conf
 
 # package install is finished, clean up
 RUN apt-get clean && \
