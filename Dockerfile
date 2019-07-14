@@ -49,8 +49,7 @@ RUN cd /root &&\
   rm joomla.zip
 
 # configur .htaccess
-RUN mv /var/www/html/htaccess.txt /var/www/html/.htaccess &&\
-  printf "\n<IfModule mod_env.c>\n  SetEnv HTTPS on\n</IfModule>\n\n" >> /etc/apache2/apache2.conf
+RUN printf "\n<IfModule mod_env.c>\n  SetEnv HTTPS on\n</IfModule>\n\n" >> /etc/apache2/apache2.conf
 
 # package install is finished, clean up
 RUN apt-get clean && \
