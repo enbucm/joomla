@@ -21,9 +21,9 @@ RUN apt update && apt install -y libapache2-mod-php7.2 \
 RUN rm /etc/apache2/sites-enabled/* &&\
   printf "<VirtualHost *:80>\n\n" > /etc/apache2/sites-available/joomla.conf &&\
   printf "  ServerAdmin webmaster@localhost\n" >> /etc/apache2/sites-available/joomla.conf &&\
-  printf "  DocumentRoot /var/www/html\n" >> /etc/apache2/sites-available/joomla.conf &&\
+  printf "  DocumentRoot /var/www/html/joomla\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "  ServerName localhost\n\n" >> /etc/apache2/sites-available/joomla.conf &&\
-  printf "  <Directory /var/www/html>\n" >> /etc/apache2/sites-available/joomla.conf &&\
+  printf "  <Directory /var/www/html/joomla>\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "    Options FollowSymLinks\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "    AllowOverride All\n" >> /etc/apache2/sites-available/joomla.conf &&\
   printf "    Order allow,deny\n" >> /etc/apache2/sites-available/joomla.conf &&\
@@ -43,9 +43,10 @@ RUN printf "upload_max_filesize=16M\n" >> /etc/php/7.2/apache2/php.ini &&\
 RUN cd /root &&\
   wget -O joomla.zip 'https://downloads.joomla.org/cms/joomla3/3-9-10/Joomla_3-9-10-Stable-Full_Package.zip?format=zip' &&\
   rm -rf /var/www/html/* &&\
-  unzip joomla.zip -d /var/www/html &&\
-  chown -R www-data:www-data /var/www/html &&\
-  chmod -R 755 /var/www/html &&\
+  mkdir -p /var/wwww/html/joomla &&\
+  unzip joomla.zip -d /var/www/html/joomla &&\
+  chown -R www-data:www-data /var/www/html/joomla &&\
+  chmod -R 755 /var/www/html/joomla &&\
   rm joomla.zip
 
 # configur .htaccess
@@ -56,7 +57,7 @@ RUN apt-get clean && \
   rm -rf /var/lib/apt/lists/* &&\
   rm -rf /tmp/* /var/tmp/*
 
-VOLUME [ "/www/var/html", "/var/log/apache2" ]
+VOLUME [ "/www/var/html/joomla", "/var/log/apache2" ]
 
 EXPOSE 80
 
